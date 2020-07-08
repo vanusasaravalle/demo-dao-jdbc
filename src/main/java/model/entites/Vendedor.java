@@ -16,7 +16,7 @@ public class Vendedor implements Serializable {
 
     private Departamento departamento;
 
-    public Vendedor(Integer id, String name, String email, Date nascimento, Double salario, Departamento departamento) {
+    public Vendedor() {
         this.id = id;
         this.name = name;
         this.email = email;
