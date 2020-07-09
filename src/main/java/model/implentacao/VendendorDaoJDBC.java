@@ -43,9 +43,9 @@ public class VendendorDaoJDBC implements VendedorDao {
         ResultSet rs = null;
         try{
             st = conn.prepareStatement(
-                    "SELECT vendedor. *,departamento.Name as DepName"
-                    + "FROM vendendor INNER JOIN departamento"
-                    +"ON vendedor.ID = ?");
+                    "SELECT vendedor. *,departamento.Name as DepName "
+                    + "FROM vendendor INNER JOIN departamento "
+                    +"ON vendedor.ID = ? ");
 
             st.setInt(1, id);
             rs = st.executeQuery();
@@ -94,11 +94,11 @@ public class VendendorDaoJDBC implements VendedorDao {
         ResultSet rs = null;
         try{
             st = conn.prepareStatement(
-                    "SELECT vendedor. *,departamento.Name as DepName"
-                            + "FROM vendendor INNER JOIN departamento"
-                            +"ON vendedor.DepartamentoId = departamento.Id"
-                            + "WHERE DepartamentoId = ?"
-                            + "ORDER BY Name");
+                    "SELECT vendedor. *,departamento.Name as DepName "
+                            + "FROM vendendor INNER JOIN departamento "
+                            +"ON vendedor.DepartamentoId = departamento.Id "
+                            + "WHERE DepartamentoId = ? "
+                            + "ORDER BY Name ");
 
             st.setInt(1, departamento.getId());
             rs = st.executeQuery();
