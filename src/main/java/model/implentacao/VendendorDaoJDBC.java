@@ -58,6 +58,28 @@ public class VendendorDaoJDBC implements VendedorDao {
     @Override
     public void update(Vendedor obj) {
 
+        PreparedStatement st = null;
+        try {
+
+            st = conn.prepareStatement(
+                    "UPDATE vendedor "
+                            + "SET Name = ?, Email = ?, Nascimento = ?, salario = ?, DepartamentoId = ?) "
+                            + "WHERE Id = ? ");
+
+            st.setString(1, obj.getName());
+            st.setString(2, obj.getEmail());
+            st.setDate(3, (java.sql.Date) new Date(obj.getNascimento().getTime()));
+            st.setDouble(4, obj.getSalario());
+            st.setInt(5, obj.getDepartamento().getId());
+            st.setInt(6, obj.getId());
+
+            st.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage() );
+        }
+
     }
 
     @Override
@@ -80,7 +102,7 @@ public class VendendorDaoJDBC implements VendedorDao {
             if (rs.next()){
 
                 Departamento dep = instantiateDepartamento(rs);
-                Vendedor obj = instantiateVendedor(rs, dep);
+                Vendedor obj = instantiateVendedor(rs, dep, departamento);
 
                 return obj;
             }
@@ -91,7 +113,7 @@ public class VendendorDaoJDBC implements VendedorDao {
         }
     }
 
-    private Vendedor instantiateVendedor(ResultSet rs, Departamento dep) throws SQLException {
+    private Vendedor instantiateVendedor(ResultSet rs, Departamento dep, Departamento departamento) throws SQLException {
 
         Vendedor obj = new Vendedor(null, "Greg", "greg@gmail.com", new Date(), 4000.00, departamento);
         obj.setId(rs.getInt("Id"));
@@ -136,7 +158,7 @@ public class VendendorDaoJDBC implements VendedorDao {
                     map.put(rs.getInt("Departamento"), dep);
                 }
 
-                Vendedor obj = instantiateVendedor(rs, dep);
+                Vendedor obj = instantiateVendedor(rs, dep, departamento);
                 list.add(obj);
 
                 return list;
@@ -175,7 +197,7 @@ public class VendendorDaoJDBC implements VendedorDao {
                     map.put(rs.getInt("Departamento"), dep);
                 }
 
-                Vendedor obj = instantiateVendedor(rs, dep);
+                Vendedor obj = instantiateVendedor(rs, dep, departamento);
                 list.add(obj);
 
                 return list;

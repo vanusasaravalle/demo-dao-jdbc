@@ -28,17 +28,23 @@ public class Programa {
             System.out.println(obj);
         }
 
-        System.out.println("/n=====Teste 3: vendendor findByDeapartamento=====");
+        System.out.println("/n=====Teste 3: vendendor findByAll=====");
         list = vendedorDao.findAll();
 
         for (Vendedor obj : list){
             System.out.println(obj);
         }
 
-        System.out.println("/n=====Teste 4: vendendor findByDeapartamento=====");
+        System.out.println("/n=====Teste 4: vendendor insert====");
 
         Vendedor newVendedor = new Vendedor(null, "Greg", "greg@gmail.com", new Date(), 4000.00, departamento);
         vendedorDao.insert(newVendedor);
         System.out.println("Insert! New id = " + newVendedor.getId());
+
+        System.out.println("/n=====Teste 5: vendendor update=====");
+        vendedor = vendedorDao.findByIdId(1);
+        vendedor.setName("Marta waine");
+        vendedorDao.update(vendedor);
+        System.out.println("update completado");
     }
 }

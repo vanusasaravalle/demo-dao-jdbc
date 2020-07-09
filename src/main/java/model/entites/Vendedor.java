@@ -67,7 +67,7 @@ public class Vendedor implements Serializable {
         this.salario = salario;
     }
 
-    public String getDepartamento() {
+    public Departamento getDepartamento() {
         return departamento;
     }
 
