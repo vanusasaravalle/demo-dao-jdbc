@@ -26,5 +26,12 @@ public class Programa {
         for (Vendedor obj : list){
             System.out.println(obj);
         }
+
+        System.out.println("/n=====Teste 3: vendendor findByDeapartamento=====");
+        list = vendedorDao.findAll();
+
+        for (Vendedor obj : list){
+            System.out.println(obj);
+        }
     }
 }
