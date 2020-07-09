@@ -16,14 +16,16 @@ public class Vendedor implements Serializable {
 
     private Departamento departamento;
 
-    public Vendedor() {
+    public Vendedor(Object o, String greg, String s, Date date, double v, Departamento departamento) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.nascimento = nascimento;
         this.salario = salario;
-        this.departamento = departamento;
+        this.departamento = this.departamento;
     }
+
+
 
     public Integer getId() {
         return id;
@@ -65,7 +67,7 @@ public class Vendedor implements Serializable {
         this.salario = salario;
     }
 
-    public Departamento getDepartamento() {
+    public String getDepartamento() {
         return departamento;
     }
 

@@ -5,14 +5,9 @@ import model.dao.VendedorDao;
 import model.entites.Departamento;
 import model.entites.Vendedor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
 
 public class VendendorDaoJDBC implements VendedorDao {
 
@@ -24,6 +19,39 @@ public class VendendorDaoJDBC implements VendedorDao {
 
     @Override
     public void insert(Vendedor obj) {
+
+        PreparedStatement st = null;
+        try {
+
+            st = conn.prepareStatement(
+                    "Insert into vendedor "
+                    + "(Name, Email, Nascimento, salario, DepartamentoId) "
+                    + "VALUES "
+                    + "(?,?,?,?,?,?) ",
+                    Statement.RETURN_GENERATED_KEYS);
+
+            st.setString(1, obj.getName());
+            st.setString(2, obj.getEmail());
+            st.setDate(3, (java.sql.Date) new Date(obj.getNascimento().getTime()));
+            st.setDouble(4, obj.getSalario());
+            st.setInt(5, obj.getDepartamento().getId());
+
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected > 0){
+                ResultSet rs =  st.getGeneratedKeys();
+                if (rs.next()){
+                    int id = rs.getInt(1);
+                    obj.setId(id);
+                }
+            }else {
+                throw new DbException("Erro");
+            }
+
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage() );
+        }
 
     }
 
@@ -65,7 +93,7 @@ public class VendendorDaoJDBC implements VendedorDao {
 
     private Vendedor instantiateVendedor(ResultSet rs, Departamento dep) throws SQLException {
 
-        Vendedor obj = new Vendedor();
+        Vendedor obj = new Vendedor(null, "Greg", "greg@gmail.com", new Date(), 4000.00, departamento);
         obj.setId(rs.getInt("Id"));
         obj.setName(rs.getString("Nome"));
         obj.setEmail(rs.getString("Email"));
