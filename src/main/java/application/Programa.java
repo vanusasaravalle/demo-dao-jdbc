@@ -8,10 +8,13 @@ import model.entites.Vendedor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Programa {
 
     public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
 
        VendedorDao vendedorDao = DaoFabrica.createVendendorDao();
 
@@ -46,5 +49,14 @@ public class Programa {
         vendedor.setName("Marta waine");
         vendedorDao.update(vendedor);
         System.out.println("update completado");
+
+
+     System.out.println("/n=====Teste 6: vendendor delete=====");
+     System.out.println("Digite o Id para remover");
+     int id = sc.nextInt();
+     vendedorDao.deleteById(id);
+     System.out.println("Deletado com sucesso!!!");
+
+
     }
 }
