@@ -9,7 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VendendorDaoJDBC implements VendedorDao {
 
@@ -74,7 +77,7 @@ public class VendendorDaoJDBC implements VendedorDao {
     }
 
     private Departamento instantiateDepartamento(ResultSet rs) throws SQLException {
-        Departamento dep = new Departamento();
+        Departamento dep = new Departamento(2, null);
         dep.setId(rs.getInt("DapartamentoId"));
         dep.setName("DapName");
         return dep;
@@ -83,5 +86,44 @@ public class VendendorDaoJDBC implements VendedorDao {
     @Override
     public List<Vendedor> findAll() {
         return null;
+    }
+
+    @Override
+    public List<Vendedor> findByDepartamento(Departamento departamento) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try{
+            st = conn.prepareStatement(
+                    "SELECT vendedor. *,departamento.Name as DepName"
+                            + "FROM vendendor INNER JOIN departamento"
+                            +"ON vendedor.DepartamentoId = departamento.Id"
+                            + "WHERE DepartamentoId = ?"
+                            + "ORDER BY Name");
+
+            st.setInt(1, departamento.getId());
+            rs = st.executeQuery();
+
+            List<Vendedor> list = new ArrayList<>();
+            Map<Integer, Departamento> map = new HashMap<>();
+
+            while (rs.next()){
+
+                Departamento dep = map.get(rs.getInt("DepartamentoId"));
+
+                if (dep == null){
+                    dep = instantiateDepartamento(rs);
+                    map.put(rs.getInt("Departamento"), dep);
+                }
+
+                Vendedor obj = instantiateVendedor(rs, dep);
+                list.add(obj);
+
+                return list;
+            }
+            return null;
+
+        } catch (SQLException e) {
+            throw  new DbException(e.getMessage());
+        }
     }
 }
